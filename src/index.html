@@ -6,14 +6,52 @@
   <link href="./output.css" rel="stylesheet">
 </head>
 <body class="bg-zinc-800 text-green-500 text-3xl font-retro">
-  <div class="grid grid-rows-[50px_auto_20px] border-4 border-green-500 min-h-dvh p-6">
-    <h1 class="text-5xl text-center">City of Nanaimo Dam Control</h1>
+  <div class="grid grid-rows-[60px_auto_30px] border-4 border-green-500 min-h-dvh">
+    <h1 class="w-full flex items-center justify-center text-5xl text-center">City of Nanaimo Dam Control</h1>
 
-    <div>
+    <div class="flex divide-x-4 border-y-4 divide-green-500 border-green-500">
+      <div class="relative w-full flex flex-col divide-x-4 divide-green-500">
+        <div class="absolute inset-0 grid grid-rows-2 divide-y-4 divide-green-500">
+          <div class="flex justify-center items-center">
+            <div class="text-center">
+              <div class="text-5xl">pH</div>
+              <div class="text-6xl">6.8</div>
+            </div>
+          </div>
+          <div class="flex justify-center items-center">
+            <div class="text-center">
+              <div class="text-5xl">CaCO<sub>2</sub></div>
+              <div class="text-6xl">8-15 mg/L</div>
+            </div>
+          </div>
+        </div>
+      </div>
 
+      <div class="relative w-full flex flex-col divide-x-4 divide-green-500">
+        <div class="absolute inset-0 grid grid-rows-2 divide-y-4 divide-green-500">
+          <div class="flex justify-center items-center">
+            <div class="text-center">
+              <div class="text-6xl">64.4 F</div>
+            </div>
+          </div>
+          <div class="flex justify-center items-center">
+            <div class="text-center">
+              <div class="text-5xl">Cl<sup>-</sup></div>
+              <div class="text-6xl">0.9 - 1.2 ppm</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="w-full flex justify-center items-center">
+        <div class="text-center">
+          <div class="text-5xl">Water Level</div>
+          <div class="text-6xl">100%</div>
+        </div>
+      </div>
     </div>
 
-    <div class="text-center text-xl">
+    <div class="w-full flex items-center justify-center content-center text-center text-xl">
       &copy; 1986 Oracle Software Systems Ltd
     </div>
   </div>
