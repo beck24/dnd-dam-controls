@@ -9,7 +9,8 @@
   <script defer src="/alpine.js"></script>
 </head>
 
-<body class="bg-zinc-800 text-green-500 text-3xl font-retro overflow-hidden" x-data="{
+<body class="bg-zinc-800 text-green-500 text-3xl font-retro overflow-hidden crt" x-data="{
+  beep: new Audio('/beep.mp3'),
   ph: 70,
   caco: 105,
   cl: 9,
@@ -28,6 +29,9 @@
     this.level = 9886;
   },
   animateGateOpen() {
+    this.beep.play();
+    setTimeout(() => this.beep.play(), 800);
+
     this.gateStatus = 'Opening';
     let speed = 15;
     let iteration = 0;
@@ -58,6 +62,12 @@
     setTimeout(() => {
       clearInterval(interval);
       this.gateStatus = 'Blocked';
+
+      const beepInterval = setInterval(() => {
+        this.beep.play();
+      }, 500);
+
+      setTimeout(() => clearInterval(beepInterval), 20000);
     }, 36000);
   },
   init() {
@@ -114,22 +124,22 @@
 }">
   <div class="relative bg-zinc-800 grid grid-rows-[60px_60px_auto_30px] border-4 border-green-500 min-h-dvh"
     :class="{ 'animate-flicker': flicker, 'animate-shakex': shakeX, 'animate-shakey': shakeY }">
-    <h1 class="w-full flex items-center justify-center text-5xl text-center">City of Nanaimo Dam Control</h1>
+    <h1 class="w-full flex items-center justify-center text-5xl text-center crt-smudge">City of Nanaimo Dam Control</h1>
 
     <div class="flex items-center justify-center border-t-4 border-green-500 gap-12">
-      <button type="button" class="p-1" @click="showClControls = true">
+      <button type="button" class="p-1 crt-smudge" @click="showClControls = true">
         Cl<sup>-</sup>
       </button>
 
-      <button type="button" class="p-1" @click="showPhControls = true">
+      <button type="button" class="p-1 crt-smudge" @click="showPhControls = true">
         pH
       </button>
 
-      <button type="button" class="p-1" @click="showCaCOControls = true">
+      <button type="button" class="p-1 crt-smudge" @click="showCaCOControls = true">
         CaCO<sub>2</sub>
       </button>
 
-      <button type="button" class="p-1" @click="showGateControls = true">
+      <button type="button" class="p-1 crt-smudge" @click="showGateControls = true">
         Flood Gate
       </button>
     </div>
@@ -139,14 +149,14 @@
         <div class="absolute inset-0 grid grid-rows-2 divide-y-4 divide-green-500">
           <div class="flex justify-center items-center">
             <div class="text-center">
-              <div class="text-5xl">pH</div>
-              <div class="text-6xl" x-text="(ph / 10).toFixed(1)"></div>
+              <div class="text-5xl crt-smudge">pH</div>
+              <div class="text-6xl crt-smudge" x-text="(ph / 10).toFixed(1)"></div>
             </div>
           </div>
           <div class="flex justify-center items-center">
             <div class="text-center">
-              <div class="text-5xl">CaCO<sub>2</sub></div>
-              <div class="text-6xl" x-text="(caco / 10).toFixed(1) + ' mg/L'"></div>
+              <div class="text-5xl crt-smudge">CaCO<sub>2</sub></div>
+              <div class="text-6xl crt-smudge" x-text="(caco / 10).toFixed(1) + ' mg/L'"></div>
             </div>
           </div>
         </div>
@@ -156,13 +166,13 @@
         <div class="absolute inset-0 grid grid-rows-2 divide-y-4 divide-green-500">
           <div class="flex justify-center items-center">
             <div class="text-center">
-              <div class="text-6xl" x-text="(temp / 10).toFixed(1) + ' F'"></div>
+              <div class="text-6xl crt-smudge" x-text="(temp / 10).toFixed(1) + ' F'"></div>
             </div>
           </div>
           <div class="flex justify-center items-center">
             <div class="text-center">
-              <div class="text-5xl">Cl<sup>-</sup></div>
-              <div class="text-6xl" x-text="(cl / 10).toFixed(1) + ' ppm'"></div>
+              <div class="text-5xl crt-smudge">Cl<sup>-</sup></div>
+              <div class="text-6xl crt-smudge" x-text="(cl / 10).toFixed(1) + ' ppm'"></div>
             </div>
           </div>
         </div>
@@ -170,14 +180,14 @@
 
       <div class="w-full flex justify-center items-center">
         <div class="text-center">
-          <div class="text-5xl">Gate <span x-text="gateStatus"></span></div>
-          <div class="text-5xl">Water Level</div>
-          <div class="text-6xl" x-text="(level / 100).toFixed(2) + '%'"></div>
+          <div class="text-5xl crt-smudge">Gate <span x-text="gateStatus"></span></div>
+          <div class="text-5xl crt-smudge">Water Level</div>
+          <div class="text-6xl crt-smudge" x-text="(level / 100).toFixed(2) + '%'"></div>
         </div>
       </div>
     </div>
 
-    <div class="w-full flex items-center justify-center content-center text-center text-xl">
+    <div class="w-full flex items-center justify-center content-center text-center text-xl crt-smudge">
       &copy; 1986 Oracle Software Systems Ltd
     </div>
 
@@ -188,17 +198,17 @@
           <template x-if="showClControls">
             <div x-data="{ tempCl: cl }">
               <div class="flex gap-6 items-center">
-                <button type="button" class="px-2 text-9xl" @click="tempCl = Math.max(0, tempCl - 1)">-</button>
+                <button type="button" class="px-2 text-9xl crt-smudge" @click="tempCl = Math.max(0, tempCl - 1)">-</button>
                 <div class="w-full text-center">
-                  <div class="text-5xl">Cl<sup>-</sup></div>
-                  <div class="text-6xl" x-text="(tempCl / 10).toFixed(1) + ' ppm'"></div>
+                  <div class="text-5xl crt-smudge">Cl<sup>-</sup></div>
+                  <div class="text-6xl crt-smudge" x-text="(tempCl / 10).toFixed(1) + ' ppm'"></div>
                 </div>
-                <button type="button" class="px-2 text-9xl" @click="tempCl = Math.min(15, tempCl + 1)">+</button>
+                <button type="button" class="px-2 text-9xl crt-smudge" @click="tempCl = Math.min(15, tempCl + 1)">+</button>
               </div>
 
               <div class="flex gap-6 justify-center py-4">
-                <button @click="cl = tempCl; showClControls = false;" type="button" class="text-5xl p-1">OK</button>
-                <button @click="showClControls = false" type="button" class="text-5xl p-1">Cancel</button>
+                <button @click="cl = tempCl; showClControls = false; beep.play();" type="button" class="text-5xl p-1 crt-smudge">OK</button>
+                <button @click="showClControls = false" type="button" class="text-5xl p-1 crt-smudge">Cancel</button>
               </div>
             </div>
           </template>
@@ -207,17 +217,17 @@
           <template x-if="showPhControls">
             <div x-data="{ tempPh: ph }">
               <div class="flex gap-6 items-center">
-                <button type="button" class="px-2 text-9xl" @click="tempPh = Math.max(60, tempPh - 1)">-</button>
+                <button type="button" class="px-2 text-9xl crt-smudge" @click="tempPh = Math.max(60, tempPh - 1)">-</button>
                 <div class="w-full text-center">
-                  <div class="text-5xl">pH</div>
-                  <div class="text-6xl" x-text="(tempPh / 10).toFixed(1)"></div>
+                  <div class="text-5xl crt-smudge">pH</div>
+                  <div class="text-6xl crt-smudge" x-text="(tempPh / 10).toFixed(1)"></div>
                 </div>
-                <button type="button" class="px-2 text-9xl" @click="tempPh = Math.min(80, tempPh + 1)">+</button>
+                <button type="button" class="px-2 text-9xl crt-smudge" @click="tempPh = Math.min(80, tempPh + 1)">+</button>
               </div>
 
               <div class="flex gap-6 justify-center py-4">
-                <button @click="ph = tempPh; showPhControls = false;" type="button" class="text-5xl p-1">OK</button>
-                <button @click="showPhControls = false" type="button" class="text-5xl p-1">Cancel</button>
+                <button @click="ph = tempPh; showPhControls = false; beep.play();" type="button" class="text-5xl p-1 crt-smudge">OK</button>
+                <button @click="showPhControls = false" type="button" class="text-5xl p-1 crt-smudge">Cancel</button>
               </div>
             </div>
           </template>
@@ -226,18 +236,18 @@
           <template x-if="showCaCOControls">
             <div x-data="{ tempCaco: caco }">
               <div class="flex gap-6 items-center">
-                <button type="button" class="px-2 text-9xl" @click="tempCaco = Math.max(80, tempCaco - 1)">-</button>
+                <button type="button" class="px-2 text-9xl crt-smudge" @click="tempCaco = Math.max(80, tempCaco - 1)">-</button>
                 <div class="w-full text-center">
-                  <div class="text-5xl">CaCO<sub>2</sub></div>
-                  <div class="text-6xl" x-text="(tempCaco / 10).toFixed(1)"></div>
+                  <div class="text-5xl crt-smudge">CaCO<sub>2</sub></div>
+                  <div class="text-6xl crt-smudge" x-text="(tempCaco / 10).toFixed(1)"></div>
                 </div>
-                <button type="button" class="px-2 text-9xl" @click="tempCaco = Math.min(150, tempCaco + 1)">+</button>
+                <button type="button" class="px-2 text-9xl crt-smudge" @click="tempCaco = Math.min(150, tempCaco + 1)">+</button>
               </div>
 
               <div class="flex gap-6 justify-center py-4">
-                <button @click="caco = tempCaco; showCaCOControls = false;" type="button"
-                  class="text-5xl p-1">OK</button>
-                <button @click="showCaCOControls = false" type="button" class="text-5xl p-1">Cancel</button>
+                <button @click="caco = tempCaco; showCaCOControls = false; beep.play();" type="button"
+                  class="text-5xl p-1 crt-smudge">OK</button>
+                <button @click="showCaCOControls = false" type="button" class="text-5xl p-1 crt-smudge">Cancel</button>
               </div>
             </div>
           </template>
@@ -249,50 +259,50 @@
               <!-- unauthorized -->
               <template x-if="!authed">
                 <div>
-                  <div class="text-5xl">Admin Password</div>
+                  <div class="text-5xl crt-smudge">Admin Password</div>
 
                   <div class="input-wrapper" :style="{ '--caret-position': gatePassword.length }">
                     <input
                       x-ref="passwordInput"
-                      class="w-full text-5xl bg-transparent border-4 border-green-500 outline-none focus:outline-none"
+                      class="w-full text-5xl bg-transparent border-4 border-green-500 outline-none focus:outline-none crt-smudge"
                       autocomplete="off"
                       type="password" x-model="gatePassword">
                   </div>
 
                   <template x-if="error.length > 1 && gatePassword.length === 0">
-                    <div x-text="error"></div>
+                    <div class="crt-smudge" x-text="error"></div>
                   </template>
                 </div>
               </template>
 
               <template x-if="authed">
                 <div class="w-full grid grid-cols-3 gap-4">
-                  <button type="button" class="flex items-center gap-2" @click="gateValue = 'closed'">
+                  <button type="button" class="flex items-center gap-2 crt-smudge" @click="gateValue = 'closed'">
                     <span>[<span :class="{ 'opacity-0': gateValue !== 'closed'}">x</span>]</span>
                     Close
                   </button>
 
-                  <button type="button" class="flex items-center gap-2" @click="gateValue = '20'">
+                  <button type="button" class="flex items-center gap-2 crt-smudge" @click="gateValue = '20'">
                     <span>[<span :class="{ 'opacity-0': gateValue !== '20'}">x</span>]</span>
                     Open 20%
                   </button>
 
-                  <button type="button" class="flex items-center gap-2" @click="gateValue = '40'">
+                  <button type="button" class="flex items-center gap-2 crt-smudge" @click="gateValue = '40'">
                     <span>[<span :class="{ 'opacity-0': gateValue !== '40'}">x</span>]</span>
                     Open 40%
                   </button>
 
-                  <button type="button" class="flex items-center gap-2" @click="gateValue = '60'">
+                  <button type="button" class="flex items-center gap-2 crt-smudge" @click="gateValue = '60'">
                     <span>[<span :class="{ 'opacity-0': gateValue !== '60'}">x</span>]</span>
                     Open 40%
                   </button>
 
-                  <button type="button" class="flex items-center gap-2" @click="gateValue = '80'">
+                  <button type="button" class="flex items-center gap-2 crt-smudge" @click="gateValue = '80'">
                     <span>[<span :class="{ 'opacity-0': gateValue !== '80'}">x</span>]</span>
                     Open 40%
                   </button>
 
-                  <button type="button" class="flex items-center gap-2" @click="gateValue = '100'">
+                  <button type="button" class="flex items-center gap-2 crt-smudge" @click="gateValue = '100'">
                     <span>[<span :class="{ 'opacity-0': gateValue !== '100'}">x</span>]</span>
                     <span>&#9888;</span> Open 100%
                   </button>
@@ -313,7 +323,7 @@
                       authed = true;
                     }"
                     type="button"
-                    class="text-5xl p-1"
+                    class="text-5xl p-1 crt-smudge"
                   >
                     OK
                   </button>
@@ -331,19 +341,19 @@
                       showGateControls = false;
                     }"
                     type="button"
-                    class="text-5xl p-1"
+                    class="text-5xl p-1 crt-smudge"
                   >
                     OK
                   </button>
                 </template>
                 
-                <button @click="showGateControls = false" type="button" class="text-5xl p-1">Cancel</button>
+                <button @click="showGateControls = false" type="button" class="text-5xl p-1 crt-smudge">Cancel</button>
               </div>
             </div>
           </template>
 
           <template x-if="gateStatus === 'Blocked'">
-            <div class="text-6xl py-6 text-center">
+            <div class="text-6xl py-6 text-center crt-smudge">
               <span>&#9888;</span> Flood Gate blockage detected<br>
               manual intervention required
             </div>
