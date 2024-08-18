@@ -16,11 +16,49 @@
   temp: 644,
   flicker: false,
   shake: false,
-  level: '100',
+  level: 9886,
   showClControls: false,
   showPhControls: false,
   showCaCOControls: false,
   showGateControls: false,
+  gateStatus: 'Closed',
+  animateGateClose() {
+    this.gateStatus = 'Closed';
+    this.level = 9886;
+  },
+  animateGateOpen() {
+    this.gateStatus = 'Opening';
+    let speed = 15;
+    let iteration = 0;
+    
+    const interval = setInterval(() => {
+      iteration++;
+
+      if (!(iteration % speed)) {
+        this.level--;
+      }
+    }, 100);
+
+    // ramp up for 16 seconds
+    setTimeout(() => speed = 10, 1500);
+    setTimeout(() => speed = 8, 3000);
+    setTimeout(() => speed = 6, 9000);
+    setTimeout(() => speed = 4, 12000);
+    setTimeout(() => speed = 2, 14000);
+    setTimeout(() => speed = 1, 16000);
+
+    // then quickly ramp down
+    setTimeout(() => speed = 2, 25000);
+    setTimeout(() => speed = 4, 28000);
+    setTimeout(() => speed = 6, 30000);
+    setTimeout(() => speed = 8, 32000);
+    setTimeout(() => speed = 10, 34000);
+
+    setTimeout(() => {
+      clearInterval(interval);
+      this.gateStatus = 'Blocked';
+    }, 36000);
+  },
   init() {
     const randomNumber = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
@@ -125,8 +163,9 @@
 
       <div class="w-full flex justify-center items-center">
         <div class="text-center">
+          <div class="text-5xl">Gate <span x-text="gateStatus"></span></div>
           <div class="text-5xl">Water Level</div>
-          <div class="text-6xl" x-text="level + '%'"></div>
+          <div class="text-6xl" x-text="(level / 100).toFixed(2) + '%'"></div>
         </div>
       </div>
     </div>
@@ -135,9 +174,9 @@
       &copy; 1986 Oracle Software Systems Ltd
     </div>
 
-    <template x-if="showClControls || showPhControls || showCaCOControls || showGateControls">
-      <div class="absolute inset-0 p-[20%]" x-trap="true">
-        <div class="border-4 border-green-500 bg-zinc-800 p-6">
+    <template x-if="showClControls || showPhControls || showCaCOControls || showGateControls || gateStatus === 'Blocked'">
+      <div class="absolute inset-0 flex items-center justify-center" x-trap="true">
+        <div class="w-[75vw] border-4 border-green-500 bg-zinc-800 p-6">
           <!-- CL- -->
           <template x-if="showClControls">
             <div x-data="{ tempCl: cl }">
@@ -176,6 +215,7 @@
             </div>
           </template>
 
+          <!-- caco -->
           <template x-if="showCaCOControls">
             <div x-data="{ tempCaco: caco }">
               <div class="flex gap-6 items-center">
@@ -195,25 +235,110 @@
             </div>
           </template>
 
+          <!-- gate controls -->
           <template x-if="showGateControls">
-            <div x-data="{ authed: false, password: '', error: '' }">
+            <div x-data="{ authed: false, gatePassword: '', error: '', gateValue: 'closed' }">
+
+              <!-- unauthorized -->
               <template x-if="!authed">
                 <div>
                   <div class="text-5xl">Admin Password</div>
 
-                  <div class="input-wrapper" :style="{ '--caret-position': password.length }">
+                  <div class="input-wrapper" :style="{ '--caret-position': gatePassword.length }">
                     <input
+                      x-ref="passwordInput"
                       class="w-full text-5xl bg-transparent border-4 border-green-500 outline-none focus:outline-none"
                       autocomplete="off"
-                      type="password" x-model="password">
+                      type="password" x-model="gatePassword">
                   </div>
+
+                  <template x-if="error.length > 1 && gatePassword.length === 0">
+                    <div x-text="error"></div>
+                  </template>
+                </div>
+              </template>
+
+              <template x-if="authed">
+                <div class="w-full grid grid-cols-3 gap-4">
+                  <button type="button" class="flex items-center gap-2" @click="gateValue = 'closed'">
+                    <span>[<span :class="{ 'opacity-0': gateValue !== 'closed'}">x</span>]</span>
+                    Close
+                  </button>
+
+                  <button type="button" class="flex items-center gap-2" @click="gateValue = '20'">
+                    <span>[<span :class="{ 'opacity-0': gateValue !== '20'}">x</span>]</span>
+                    Open 20%
+                  </button>
+
+                  <button type="button" class="flex items-center gap-2" @click="gateValue = '40'">
+                    <span>[<span :class="{ 'opacity-0': gateValue !== '40'}">x</span>]</span>
+                    Open 40%
+                  </button>
+
+                  <button type="button" class="flex items-center gap-2" @click="gateValue = '60'">
+                    <span>[<span :class="{ 'opacity-0': gateValue !== '60'}">x</span>]</span>
+                    Open 40%
+                  </button>
+
+                  <button type="button" class="flex items-center gap-2" @click="gateValue = '80'">
+                    <span>[<span :class="{ 'opacity-0': gateValue !== '80'}">x</span>]</span>
+                    Open 40%
+                  </button>
+
+                  <button type="button" class="flex items-center gap-2" @click="gateValue = '100'">
+                    <span>[<span :class="{ 'opacity-0': gateValue !== '100'}">x</span>]</span>
+                    <span>&#9888;</span> Open 100%
+                  </button>
                 </div>
               </template>
 
               <div class="flex gap-6 justify-center py-4">
-                <button @click="console.log(password)" type="button" class="text-5xl p-1">OK</button>
+                <template x-if="!authed">
+                  <button
+                    @click="() => {
+                      if (gatePassword.toLowerCase().trim().replaceAll(' ', '') !== 'freshwater') {
+                        error = 'Error: Invalid password'
+                        gatePassword = '';
+                        $refs.passwordInput.focus();
+                        return;
+                      }
+
+                      authed = true;
+                    }"
+                    type="button"
+                    class="text-5xl p-1"
+                  >
+                    OK
+                  </button>
+                </template>
+
+                <template x-if="authed">
+                  <button
+                    @click="() => {
+                      if (gateValue === 'closed') {
+                        animateGateClose();
+                      } else {
+                        animateGateOpen();
+                      }
+
+                      showGateControls = false;
+                    }"
+                    type="button"
+                    class="text-5xl p-1"
+                  >
+                    OK
+                  </button>
+                </template>
+                
                 <button @click="showGateControls = false" type="button" class="text-5xl p-1">Cancel</button>
               </div>
+            </div>
+          </template>
+
+          <template x-if="gateStatus === 'Blocked'">
+            <div class="text-6xl py-6 text-center">
+              <span>&#9888;</span> Flood Gate blockage detected<br>
+              manual intervention required
             </div>
           </template>
         </div>
