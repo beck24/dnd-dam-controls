@@ -4,9 +4,63 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="./output.css" rel="stylesheet">
+  <script defer src="/alpine.js"></script>
 </head>
-<body class="bg-zinc-800 text-green-500 text-3xl font-retro">
-  <div class="grid grid-rows-[60px_auto_30px] border-4 border-green-500 min-h-dvh">
+<body class="bg-zinc-800 text-green-500 text-3xl font-retro" x-data="{
+  ph: 70,
+  caco: 105,
+  cl: 9,
+  temp: 644,
+  flicker: false,
+  shake: false,
+  level: '100',
+  init() {
+    const randomNumber = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+
+    $nextTick(() => {
+      setInterval(() => {
+        this.ph = randomNumber(68, 72);
+      }, 6000);
+
+      setInterval(() => {
+        this.temp = randomNumber(643, 646);
+      }, 25000);
+
+      setInterval(() => {
+        const num = randomNumber(0, 3);
+        const newCaco = Math.random() > 0.5 ? this.caco + num : this.caco - num;
+
+        if (newCaco >= 80 && newCaco <= 150) {
+          this.caco = newCaco;
+        }
+      }, 2500);
+
+      setInterval(() => {
+        const num = randomNumber(0, 1);
+        const newCl = Math.random() > 0.5 ? this.cl + num : this.cl - num;
+
+        if (newCl >= 9 && newCl <= 12) {
+          this.cl = newCl;
+        }
+      }, 8000);
+
+      setInterval(() => {
+        if (this.flicker) {
+          this.flicker = false;
+        } else {
+          this.flicker = Math.random() > 0.8;
+        }
+
+        if (this.shake) {
+          this.shake = false;
+        } else {
+         this.shake = Math.random() > 0.9;
+        }
+      }, 500);
+    });
+  }
+}">
+  <div class="bg-zinc-800 grid grid-rows-[60px_auto_30px] border-4 border-green-500 min-h-dvh" :class="{ 'animate-flicker': flicker, 'animate-shake': shake }">
     <h1 class="w-full flex items-center justify-center text-5xl text-center">City of Nanaimo Dam Control</h1>
 
     <div class="flex divide-x-4 border-y-4 divide-green-500 border-green-500">
@@ -15,13 +69,13 @@
           <div class="flex justify-center items-center">
             <div class="text-center">
               <div class="text-5xl">pH</div>
-              <div class="text-6xl">6.8</div>
+              <div class="text-6xl" x-text="(ph / 10).toFixed(1)"></div>
             </div>
           </div>
           <div class="flex justify-center items-center">
             <div class="text-center">
               <div class="text-5xl">CaCO<sub>2</sub></div>
-              <div class="text-6xl">8-15 mg/L</div>
+              <div class="text-6xl" x-text="(caco / 10).toFixed(1) + ' mg/L'"></div>
             </div>
           </div>
         </div>
@@ -31,13 +85,13 @@
         <div class="absolute inset-0 grid grid-rows-2 divide-y-4 divide-green-500">
           <div class="flex justify-center items-center">
             <div class="text-center">
-              <div class="text-6xl">64.4 F</div>
+              <div class="text-6xl" x-text="(temp / 10).toFixed(1) + ' F'"></div>
             </div>
           </div>
           <div class="flex justify-center items-center">
             <div class="text-center">
               <div class="text-5xl">Cl<sup>-</sup></div>
-              <div class="text-6xl">0.9 - 1.2 ppm</div>
+              <div class="text-6xl" x-text="(cl / 10).toFixed(1) + ' ppm'"></div>
             </div>
           </div>
         </div>
@@ -46,7 +100,7 @@
       <div class="w-full flex justify-center items-center">
         <div class="text-center">
           <div class="text-5xl">Water Level</div>
-          <div class="text-6xl">100%</div>
+          <div class="text-6xl" x-text="level + '%'"></div>
         </div>
       </div>
     </div>

@@ -3,3 +3,35 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.animate-flicker {
+  animation: flicker 100ms;
+}
+
+.animate-shake {
+  animation: shake 200ms;
+}
+
+@keyframes flicker {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(10px);
+  }
+  70% {
+    transform: translateX(-10px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
