@@ -1,12 +1,15 @@
 <!doctype html>
 <html>
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="./output.css" rel="stylesheet">
+  <script defer src="/alpine-focus.js"></script>
   <script defer src="/alpine.js"></script>
 </head>
-<body class="bg-zinc-800 text-green-500 text-3xl font-retro" x-data="{
+
+<body class="bg-zinc-800 text-green-500 text-3xl font-retro overflow-hidden" x-data="{
   ph: 70,
   caco: 105,
   cl: 9,
@@ -14,6 +17,10 @@
   flicker: false,
   shake: false,
   level: '100',
+  showClControls: false,
+  showPhControls: false,
+  showCaCOControls: false,
+  showGateControls: false,
   init() {
     const randomNumber = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
@@ -60,8 +67,27 @@
     });
   }
 }">
-  <div class="bg-zinc-800 grid grid-rows-[60px_auto_30px] border-4 border-green-500 min-h-dvh" :class="{ 'animate-flicker': flicker, 'animate-shake': shake }">
+  <div class="relative bg-zinc-800 grid grid-rows-[60px_60px_auto_30px] border-4 border-green-500 min-h-dvh"
+    :class="{ 'animate-flicker': flicker, 'animate-shake': shake }">
     <h1 class="w-full flex items-center justify-center text-5xl text-center">City of Nanaimo Dam Control</h1>
+
+    <div class="flex items-center justify-center border-t-4 border-green-500 gap-12">
+      <button type="button" class="p-1" @click="showClControls = true">
+        Cl<sup>-</sup>
+      </button>
+
+      <button type="button" class="p-1" @click="showPhControls = true">
+        pH
+      </button>
+
+      <button type="button" class="p-1" @click="showCaCOControls = true">
+        CaCO<sub>2</sub>
+      </button>
+
+      <button type="button" class="p-1" @click="showGateControls = true">
+        Flood Gate
+      </button>
+    </div>
 
     <div class="flex divide-x-4 border-y-4 divide-green-500 border-green-500">
       <div class="relative w-full flex flex-col divide-x-4 divide-green-500">
@@ -108,6 +134,92 @@
     <div class="w-full flex items-center justify-center content-center text-center text-xl">
       &copy; 1986 Oracle Software Systems Ltd
     </div>
+
+    <template x-if="showClControls || showPhControls || showCaCOControls || showGateControls">
+      <div class="absolute inset-0 p-[20%]" x-trap="true">
+        <div class="border-4 border-green-500 bg-zinc-800 p-6">
+          <!-- CL- -->
+          <template x-if="showClControls">
+            <div x-data="{ tempCl: cl }">
+              <div class="flex gap-6 items-center">
+                <button type="button" class="px-2 text-9xl" @click="tempCl = Math.max(0, tempCl - 1)">-</button>
+                <div class="w-full text-center">
+                  <div class="text-5xl">Cl<sup>-</sup></div>
+                  <div class="text-6xl" x-text="(tempCl / 10).toFixed(1) + ' ppm'"></div>
+                </div>
+                <button type="button" class="px-2 text-9xl" @click="tempCl = Math.min(15, tempCl + 1)">+</button>
+              </div>
+
+              <div class="flex gap-6 justify-center py-4">
+                <button @click="cl = tempCl; showClControls = false;" type="button" class="text-5xl p-1">OK</button>
+                <button @click="showClControls = false" type="button" class="text-5xl p-1">Cancel</button>
+              </div>
+            </div>
+          </template>
+
+          <!-- ph -->
+          <template x-if="showPhControls">
+            <div x-data="{ tempPh: ph }">
+              <div class="flex gap-6 items-center">
+                <button type="button" class="px-2 text-9xl" @click="tempPh = Math.max(60, tempPh - 1)">-</button>
+                <div class="w-full text-center">
+                  <div class="text-5xl">pH</div>
+                  <div class="text-6xl" x-text="(tempPh / 10).toFixed(1)"></div>
+                </div>
+                <button type="button" class="px-2 text-9xl" @click="tempPh = Math.min(80, tempPh + 1)">+</button>
+              </div>
+
+              <div class="flex gap-6 justify-center py-4">
+                <button @click="ph = tempPh; showPhControls = false;" type="button" class="text-5xl p-1">OK</button>
+                <button @click="showPhControls = false" type="button" class="text-5xl p-1">Cancel</button>
+              </div>
+            </div>
+          </template>
+
+          <template x-if="showCaCOControls">
+            <div x-data="{ tempCaco: caco }">
+              <div class="flex gap-6 items-center">
+                <button type="button" class="px-2 text-9xl" @click="tempCaco = Math.max(80, tempCaco - 1)">-</button>
+                <div class="w-full text-center">
+                  <div class="text-5xl">CaCO<sub>2</sub></div>
+                  <div class="text-6xl" x-text="(tempCaco / 10).toFixed(1)"></div>
+                </div>
+                <button type="button" class="px-2 text-9xl" @click="tempCaco = Math.min(150, tempCaco + 1)">+</button>
+              </div>
+
+              <div class="flex gap-6 justify-center py-4">
+                <button @click="caco = tempCaco; showCaCOControls = false;" type="button"
+                  class="text-5xl p-1">OK</button>
+                <button @click="showCaCOControls = false" type="button" class="text-5xl p-1">Cancel</button>
+              </div>
+            </div>
+          </template>
+
+          <template x-if="showGateControls">
+            <div x-data="{ authed: false, password: '', error: '' }">
+              <template x-if="!authed">
+                <div>
+                  <div class="text-5xl">Admin Password</div>
+
+                  <div class="input-wrapper" :style="{ '--caret-position': password.length }">
+                    <input
+                      class="w-full text-5xl bg-transparent border-4 border-green-500 outline-none focus:outline-none"
+                      autocomplete="off"
+                      type="password" x-model="password">
+                  </div>
+                </div>
+              </template>
+
+              <div class="flex gap-6 justify-center py-4">
+                <button @click="console.log(password)" type="button" class="text-5xl p-1">OK</button>
+                <button @click="showGateControls = false" type="button" class="text-5xl p-1">Cancel</button>
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+    </template>
   </div>
 </body>
+
 </html>

@@ -12,6 +12,31 @@
   animation: shake 200ms;
 }
 
+button {
+  @apply focus:text-zinc-800 focus:bg-green-500 focus:animate-pulse outline-none focus:outline-none;
+}
+
+.input-wrapper {
+  position: relative;
+}
+
+.input-wrapper:before {
+  @apply bg-green-500 animate-[pulse_1s_ease-in-out_infinite];
+
+  content: '';
+  display: block;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 32px;
+  left: calc(8px + (var(--caret-position, 0) * 17px));
+}
+
+input {
+  caret-color: transparent;
+}
+
 @keyframes flicker {
   0% {
     opacity: 1;

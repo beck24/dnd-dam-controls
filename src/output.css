@@ -556,6 +556,40 @@ video {
   --tw-contain-style:  ;
 }
 
+.container{
+  width: 100%;
+}
+
+@media (min-width: 640px){
+  .container{
+    max-width: 640px;
+  }
+}
+
+@media (min-width: 768px){
+  .container{
+    max-width: 768px;
+  }
+}
+
+@media (min-width: 1024px){
+  .container{
+    max-width: 1024px;
+  }
+}
+
+@media (min-width: 1280px){
+  .container{
+    max-width: 1280px;
+  }
+}
+
+@media (min-width: 1536px){
+  .container{
+    max-width: 1536px;
+  }
+}
+
 .visible{
   visibility: visible;
 }
@@ -608,8 +642,8 @@ video {
   grid-template-rows: repeat(2, minmax(0, 1fr));
 }
 
-.grid-rows-\[60px_auto_30px\]{
-  grid-template-rows: 60px auto 30px;
+.grid-rows-\[60px_60px_auto_30px\]{
+  grid-template-rows: 60px 60px auto 30px;
 }
 
 .flex-col{
@@ -626,6 +660,14 @@ video {
 
 .justify-center{
   justify-content: center;
+}
+
+.gap-12{
+  gap: 3rem;
+}
+
+.gap-6{
+  gap: 1.5rem;
 }
 
 .divide-x-4 > :not([hidden]) ~ :not([hidden]){
@@ -645,6 +687,10 @@ video {
   border-color: rgb(34 197 94 / var(--tw-divide-opacity));
 }
 
+.overflow-hidden{
+  overflow: hidden;
+}
+
 .border-4{
   border-width: 4px;
 }
@@ -654,14 +700,44 @@ video {
   border-bottom-width: 4px;
 }
 
+.border-t-4{
+  border-top-width: 4px;
+}
+
 .border-green-500{
   --tw-border-opacity: 1;
   border-color: rgb(34 197 94 / var(--tw-border-opacity));
 }
 
+.bg-transparent{
+  background-color: transparent;
+}
+
 .bg-zinc-800{
   --tw-bg-opacity: 1;
   background-color: rgb(39 39 42 / var(--tw-bg-opacity));
+}
+
+.p-1{
+  padding: 0.25rem;
+}
+
+.p-6{
+  padding: 1.5rem;
+}
+
+.p-\[20\%\]{
+  padding: 20%;
+}
+
+.px-2{
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.py-4{
+  padding-top: 1rem;
+  padding-bottom: 1rem;
 }
 
 .text-center{
@@ -687,6 +763,11 @@ video {
   line-height: 1;
 }
 
+.text-9xl{
+  font-size: 8rem;
+  line-height: 1;
+}
+
 .text-xl{
   font-size: 1.25rem;
   line-height: 1.75rem;
@@ -695,6 +776,11 @@ video {
 .text-green-500{
   --tw-text-opacity: 1;
   color: rgb(34 197 94 / var(--tw-text-opacity));
+}
+
+.outline-none{
+  outline: 2px solid transparent;
+  outline-offset: 2px;
 }
 
 .filter{
@@ -715,6 +801,55 @@ video {
 
 .animate-shake {
   animation: shake 200ms;
+}
+
+button{
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+@keyframes pulse{
+  50%{
+    opacity: .5;
+  }
+}
+
+button:focus{
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --tw-bg-opacity: 1;
+  background-color: rgb(34 197 94 / var(--tw-bg-opacity));
+  --tw-text-opacity: 1;
+  color: rgb(39 39 42 / var(--tw-text-opacity));
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+.input-wrapper {
+  position: relative;
+}
+
+@keyframes pulse{
+  50%{
+    opacity: .5;
+  }
+}
+
+.input-wrapper:before{
+  animation: pulse 1s ease-in-out infinite;
+  --tw-bg-opacity: 1;
+  background-color: rgb(34 197 94 / var(--tw-bg-opacity));
+  content: '';
+  display: block;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 32px;
+  left: calc(8px + (var(--caret-position, 0) * 17px));
+}
+
+input {
+  caret-color: transparent;
 }
 
 @keyframes flicker {
@@ -743,4 +878,9 @@ video {
   100% {
     transform: translateX(0);
   }
+}
+
+.focus\:outline-none:focus{
+  outline: 2px solid transparent;
+  outline-offset: 2px;
 }
