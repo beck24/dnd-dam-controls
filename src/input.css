@@ -8,8 +8,12 @@
   animation: flicker 100ms;
 }
 
-.animate-shake {
-  animation: shake 200ms;
+.animate-shakex {
+  animation: shakex 300ms;
+}
+
+.animate-shakey {
+  animation: shakey 300ms;
 }
 
 button {
@@ -46,17 +50,32 @@ input {
   }
 }
 
-@keyframes shake {
+@keyframes shakex {
   0% {
     transform: translateX(0);
   }
   20% {
-    transform: translateX(10px);
+    transform: translateX(20px);
   }
   70% {
-    transform: translateX(-10px);
+    transform: translateX(-20px);
   }
   100% {
     transform: translateX(0);
+  }
+}
+
+@keyframes shakey {
+  0% {
+    transform: translateY(0);
+  }
+  20% {
+    transform: translateY(20px);
+  }
+  70% {
+    transform: translateY(-20px);
+  }
+  100% {
+    transform: translateY(0);
   }
 }

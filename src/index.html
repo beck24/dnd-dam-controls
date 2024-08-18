@@ -15,7 +15,8 @@
   cl: 9,
   temp: 644,
   flicker: false,
-  shake: false,
+  shakeX: false,
+  shakeY: false,
   level: 9886,
   showClControls: false,
   showPhControls: false,
@@ -96,17 +97,23 @@
           this.flicker = Math.random() > 0.8;
         }
 
-        if (this.shake) {
-          this.shake = false;
+        if (this.shakeX) {
+          this.shakeX = false;
         } else {
-         this.shake = Math.random() > 0.9;
+         this.shakeX = Math.random() > 0.9;
+        }
+
+        if (this.shakeY) {
+          this.shakeY = false;
+        } else {
+         this.shakeY = Math.random() > 0.9;
         }
       }, 500);
     });
   }
 }">
   <div class="relative bg-zinc-800 grid grid-rows-[60px_60px_auto_30px] border-4 border-green-500 min-h-dvh"
-    :class="{ 'animate-flicker': flicker, 'animate-shake': shake }">
+    :class="{ 'animate-flicker': flicker, 'animate-shakex': shakeX, 'animate-shakey': shakeY }">
     <h1 class="w-full flex items-center justify-center text-5xl text-center">City of Nanaimo Dam Control</h1>
 
     <div class="flex items-center justify-center border-t-4 border-green-500 gap-12">
@@ -343,6 +350,27 @@
           </template>
         </div>
       </div>
+    </template>
+
+    <template x-for="num in [...Array(10).keys()]">
+      <div
+        x-data="{
+          top: num * 10,
+          init() {
+            $nextTick(() => {
+              setInterval(() => {
+                const newTop = this.top - 1;
+                if (newTop < 0) {
+                  this.top = 100;
+                } else {
+                  this.top = newTop;
+                }
+              }, 200);
+            });
+          }
+        }"
+        class="absolute w-full h-6 skew-x-3 blur-sm pointer-events-none transition-all ease-linear duration-200 bg-gradient-to-t from-transparent to-transparent via-yellow-50/5"
+        :style="{ top: `${top}%`, display: top >= 100 ? 'none' : 'block'}"></div>
     </template>
   </div>
 </body>
